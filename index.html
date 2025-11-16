@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="w3-row-padding">
+  <div class="w3-third">
+    <div class="w3-card-4 w3-container w3-padding"style="background-color:Chartreuse;">
+      <fieldset style="background-color:Aquamarine;">
+        <legend style="background-color:BurlyWood;">STUDENT INFORMATION</legend>
+        <form action="/save" method="post" id="studentForm" enctype="multipart/form-data">
+          <center>
+            <div style="position: relative; display: inline-block;">
+              <img id="profilePreview"
+                   src="{{ url_for('static', filename='images/account.png') }}"
+                   alt="Profile"
+                   style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid #ccc;">
+
+              <label for="profileImageInput"
+                     style="position: absolute; bottom: 5px; right: 5px; background-color: #4CAF50;
+                            color: white; border-radius: 50%; padding: 6px; cursor: pointer;">
+                <i class="fa fa-camera"></i>
+              </label>
+
+              <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display:none;">
+            </div>
+          </center>
+
+          <input type="hidden" name="id" id="id">
+
+          <p>
+            <label ><b>IDNO</b></label>
+            <input type="text" name="idno" placeholder="IDNO" id="idno" class="w3-input w3-border" required>
+          </p>
+          <p>
+            <label><b>LASTNAME</b></label>
+            <input type="text" name="lastname" placeholder="LASTNAME" id="lastname" class="w3-input w3-border" required>
+          </p>
+          <p>
+            <label><b>FIRSTNAME</b></label>
+            <input type="text" name="firstname" placeholder="FIRSTNAME" id="firstname" class="w3-input w3-border" required>
+          </p>
+          <p>
+            <label><b>COURSE</b></label>
+            <select name="course" id="course" class="w3-input w3-border">
+              <option value="BSIT">INFORMATION TECHNOLOGY</option>
+              <option value="BSCJ">CRIMINAL JUSTICE</option>
+              <option value="BSED">EDUCATION</option>
+              <option value="BSBA">BUSINESS ADMINISTRATION</option>
+              <option value="BSHM">HOSPITALITY MANAGEMENT</option>
+              <option value="BSCS">COMPUTER SCIENCE</option>
+            </select>
+          </p>
+          <p>
+            <label><b>LEVEL</b></label>
+            <select name="level" id="level" class="w3-input w3-border">
+              <option value="1">FIRST YEAR</option>
+              <option value="2">SECOND YEAR</option>
+              <option value="3">THIRD YEAR</option>
+              <option value="4">FOURTH YEAR</option>
+            </select>
+          </p>
+          <p class="w3-right">
+            <input type="submit" value="SAVE" class="w3-button w3-green">
+            <input type="reset" value="CANCEL" class="w3-button w3-red" onclick="clearForm()">
+          </p>
+        </form>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="w3-twothird">
+    <table class="w3-table-all w3-card-4">
+      <tr>
+        <th>IDNO</th>
+        <th class="w3-hide-small w3-hide-medium">LASTNAME</th>
+        <th class="w3-hide-small w3-hide-medium">FIRSTNAME</th>
+        <th class="w3-hide-large">NAME</th>
+        <th class="w3-hide-small w3-hide-medium">COURSE</th>
+        <th class="w3-hide-small w3-hide-medium">LEVEL</th>
+        <th class="w3-hide-large">COURSE & LEVEL</th>
+        <th>ACTION</th>
+      </tr>
+      {% for student in studentlist %}
+      <tr id="student-{{ student['id'] }}">
+        <td>{{ student['idno'] }}</td>
+        <td class="w3-hide-small w3-hide-medium">{{ student['lastname']|upper }}</td>
+        <td class="w3-hide-small w3-hide-medium">{{ student['firstname']|upper }}</td>
+        <td class="w3-hide-large">{{ student['lastname']|upper }}, {{ student['firstname']|upper }}</td>
+        <td class="w3-hide-small w3-hide-medium">{{ student['course']|upper }}</td>
+        <td class="w3-hide-small w3-hide-medium">{{ student['level'] }}</td>
+        <td class="w3-hide-large">{{ student['course']|upper }}-{{ student['level'] }}</td>
+        <td>
+          <button class="w3-button w3-lime w3-border"
+                  onclick="editStudent('{{ student['id'] }}', '{{ student['idno'] }}', '{{ student['lastname'] }}', '{{ student['firstname'] }}', '{{ student['course'] }}', '{{ student['level'] }}')">
+            &#128398;
+          </button>
+          <button class="w3-button w3-red w3-border"
+                  onclick="deleteStudent('{{ student['id'] }}')">&#128465;
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% endblock %}
